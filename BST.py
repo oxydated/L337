@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from collections import deque
 
 
 @dataclass
@@ -66,8 +67,43 @@ class rootBST:
 
 tree = rootBST()
 
-Arr = [1, 1, 3, 2, 4, 2]
+Arr = [1, 1, 3, 2, 4, 1, 2]
 
 for pos, val in enumerate(Arr):
     tree.addChildToRoot(val, pos)
-    print(tree.root)
+    # print(tree.root)
+
+queue = deque([None]*len(Arr), len(Arr))
+queue.clear()
+
+
+def visitTreeBreadthFirst(aTree: rootBST, func=print):
+    queue.append(aTree.root)
+    while len(queue) > 0:
+        currentNode = queue.popleft()
+        func((currentNode.value, currentNode.position))
+        if currentNode.left:
+            queue.append(currentNode.left)
+        if currentNode.right:
+            queue.append(currentNode.right)
+
+
+visitTreeBreadthFirst(tree)
+
+
+print("\n_____________________\n")
+
+
+def visitTreeDepthFirst(aTree: rootBST, func=print):
+    stack = []
+    root = aTree.root
+    while stack or root:
+        while root:
+            stack.append(root)
+            root = root.left
+        currentNode = stack.pop()
+        func((currentNode.value, currentNode.position))
+        root = currentNode.right
+
+
+visitTreeDepthFirst(tree)
